@@ -1,20 +1,24 @@
-# Use an official Apache2 image as a base
-FROM httpd:latest
-RUN npm install
+# Use a Node.js base image that includes npm
+FROM node:16
+
+# Install Apache HTTP server
+RUN apt-get update && apt-get install -y apache2
+
 # Set the maintainer label
 LABEL maintainer="thousifthousi10@gmail.com"
 
 # Set the working directory in the container
 WORKDIR /usr/local/apache2/htdocs/
 
-# Copy the web application files (e.g., HTML, CSS, JS) into the Apache server directory
+# Copy your web application files (e.g., HTML, CSS, JS) into the Apache server directory
 COPY . /usr/local/apache2/htdocs/
+
+# Install npm dependencies (if you have a package.json)
+RUN npm install
 
 # Expose port 80 so that the container can be accessed via the web
 EXPOSE 80
 
-# Optionally, copy your custom Apache2 configuration file
-# COPY ./my-httpd.conf /usr/local/apache2/conf/httpd.conf
+# Start Apache in the foreground
+CMD ["apache2ctl", "-D", "FOREGROUND"]
 
-# Start Apache in the foreground (this is the default entrypoint for the base image)
-CMD ["httpd-foreground"]
