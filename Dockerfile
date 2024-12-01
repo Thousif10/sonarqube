@@ -1,6 +1,6 @@
 # Use an official Apache2 image as a base
 FROM httpd:latest
-
+RUN npm install
 # Set the maintainer label
 LABEL maintainer="thousifthousi10@gmail.com"
 
